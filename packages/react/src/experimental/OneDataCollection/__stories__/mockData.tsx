@@ -547,15 +547,15 @@ export const getMockVisualizations = (options?: {
           },
         ],
         onCellChange: (() => {
-          // return options?.cache
-          return (item: MockUser, columnId: string, value: string) => {
-            console.log("cell changed to ", value)
-            // const field = columnId as keyof MockUser & string
-            // if (Object.prototype.hasOwnProperty.call(item, field)) {
-            //   options.cache!.updateItemField(item.id, field, value)
-            // }
-          }
-          // : undefined
+          return options?.cache
+            ? (item: MockUser, columnId: string, value: string) => {
+                console.log("cache enabled: cell changed to ", item, value)
+                const field = columnId as keyof MockUser & string
+                if (Object.prototype.hasOwnProperty.call(item, field)) {
+                  options.cache!.updateItemField(item.id, field, value)
+                }
+              }
+            : undefined
         })(),
       },
     } as Visualization<
@@ -1444,8 +1444,8 @@ export const ExampleComponent = ({
         { id: "other", filters: { department: ["Marketing"] } },
       ],
     },
-    [cacheVersion]
-  ) // Pass cacheVersion as dependency to force refetch on cache changes
+    [cacheVersion, dataAdapterMemoized]
+  ) // Pass cacheVersion and dataAdapter as dependencies to force refetch on cache or data changes
 
   return (
     <div
@@ -1473,6 +1473,7 @@ export const ExampleComponent = ({
             mockVisualizations.card,
             mockVisualizations.list,
             mockVisualizations.kanban,
+            mockVisualizations.editableTable,
           ]
         }
       />

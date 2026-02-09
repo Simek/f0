@@ -1,6 +1,13 @@
 import { Meta, StoryObj } from "@storybook/react-vite"
+import { useMemo, useRef, useState } from "react"
 
-import { ExampleComponent, getMockVisualizations } from "../../mockData"
+import {
+  createDataAdapter,
+  ExampleComponent,
+  generateMockUsers,
+  getMockVisualizations,
+  type MockUser,
+} from "../../mockData"
 
 const meta = {
   title: "Data Collection/Visualizations/Editable Table",
@@ -18,12 +25,66 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+function useEditableTableData(
+  initialItems: MockUser[] = generateMockUsers(10)
+) {
+  const [items, setItems] = useState<MockUser[]>(initialItems)
+  const itemsRef = useRef(items)
+  itemsRef.current = items
+
+  const onCellChange = (item: MockUser, columnId: string, value: string) => {
+    console.log("onCellChange", item, columnId, value)
+    const field = columnId as keyof MockUser & string
+    if (!Object.prototype.hasOwnProperty.call(item, field)) return
+    setItems((prev) =>
+      prev.map((i) => (i.id === item.id ? { ...i, [field]: value } : { ...i }))
+    )
+  }
+
+  const dataAdapter = useMemo(() => {
+    console.log("useEditableTableData: creating data adapter")
+    const adapter = createDataAdapter({
+      data: items,
+      paginationType: "pages",
+      perPage: 10,
+    })
+    adapter.fetchData = (options: unknown) => {
+      console.log("fetchData: useEditableTableData")
+      const currentAdapter = createDataAdapter({
+        data: itemsRef.current,
+        paginationType: "pages",
+        perPage: 10,
+      })
+      return currentAdapter.fetchData(options as never)
+    }
+    return adapter
+  }, [items])
+
+  return { items, dataAdapter, onCellChange }
+}
+
 export const BasicEditableTable: Story = {
   render: () => {
     const mockVisualizations = getMockVisualizations()
+    const { dataAdapter, onCellChange } = useEditableTableData()
+    console.log("BasicEditableTable: rendering")
     return (
       <ExampleComponent
-        visualizations={[mockVisualizations.editableTable]}
+        visualizations={[
+          {
+            type: "editableTable" as const,
+            options: {
+              ...(
+                mockVisualizations.editableTable as Extract<
+                  typeof mockVisualizations.editableTable,
+                  { type: "editableTable" }
+                >
+              ).options,
+              onCellChange,
+            },
+          },
+        ]}
+        dataAdapter={dataAdapter}
         id="editable-table-basic/v1"
       />
     )
@@ -38,11 +99,27 @@ export const EditableTableWithColumnSettings: Story = {
         allowColumnReordering: true,
       },
     })
+    const { dataAdapter, onCellChange } = useEditableTableData()
+    console.log("EditableTableWithColumnSettings: rendering")
     return (
       <ExampleComponent
         tableAllowColumnReordering
         tableAllowColumnHiding
-        visualizations={[mockVisualizations.editableTable]}
+        visualizations={[
+          {
+            type: "editableTable" as const,
+            options: {
+              ...(
+                mockVisualizations.editableTable as Extract<
+                  typeof mockVisualizations.editableTable,
+                  { type: "editableTable" }
+                >
+              ).options,
+              onCellChange,
+            },
+          },
+        ]}
+        dataAdapter={dataAdapter}
         id="editable-table-settings/v1"
       />
     )
@@ -65,14 +142,28 @@ export const TableAndEditableTable: Story = {
         allowColumnReordering: true,
       },
     })
+    const { dataAdapter, onCellChange } = useEditableTableData()
+
     return (
       <ExampleComponent
         tableAllowColumnReordering
         tableAllowColumnHiding
         visualizations={[
           mockVisualizations.table,
-          mockVisualizations.editableTable,
+          {
+            type: "editableTable" as const,
+            options: {
+              ...(
+                mockVisualizations.editableTable as Extract<
+                  typeof mockVisualizations.editableTable,
+                  { type: "editableTable" }
+                >
+              ).options,
+              onCellChange,
+            },
+          },
         ]}
+        dataAdapter={dataAdapter}
         id="table-and-editable/v1"
       />
     )
