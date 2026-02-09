@@ -19,7 +19,8 @@ import { Checkbox } from "@/ui/checkbox"
 import { renderProperty } from "@/experimental/OneDataCollection/property-render"
 import type { EditableTableColumnDefinition } from "../types"
 
-import { Row, type RowProps } from "../../Table/components/Row"
+import { NestedRow } from "../../Table/components/NestedRow"
+import { type RowProps } from "../../Table/components/Row"
 import { useSticky } from "../../Table/useSticky"
 
 function getCellValue<R extends RecordType>(
@@ -122,7 +123,10 @@ const EditableRowInner = <
     index,
     groupIndex,
     nestedRowProps,
+    noBorder = false,
     loading = false,
+    disableHover = false,
+    tableWithChildren,
     onCellChange,
   } = props
 
@@ -187,11 +191,19 @@ const EditableRowInner = <
 
   if (rowWithChildren && hasChildrenLoaded) {
     return (
-      <Row
-        {...props}
-        ref={ref}
+      <NestedRow
         source={sourceWithoutItemActions}
-        disableHover={true}
+        item={item}
+        onCheckedChange={onCheckedChange}
+        selectedItems={selectedItems}
+        columns={columns}
+        frozenColumnsLeft={frozenColumnsLeft}
+        checkColumnWidth={checkColumnWidth}
+        index={index}
+        groupIndex={groupIndex}
+        nestedRowProps={nestedRowProps}
+        tableWithChildren={tableWithChildren}
+        ref={ref}
       />
     )
   }
@@ -200,7 +212,10 @@ const EditableRowInner = <
     <TableRow
       ref={ref}
       className={cn(
-        "after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:w-full after:bg-f1-border-secondary after:content-['']"
+        "group transition-colors hover:bg-f1-background-hover",
+        "after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:w-full after:bg-f1-border-secondary after:content-['']",
+        noBorder && "after:bg-white-100",
+        disableHover && "hover:bg-transparent"
       )}
     >
       {source.selectable && (
