@@ -396,6 +396,9 @@ export declare const defaultTranslations: {
             readonly moduleCard: {
                 readonly actionLabel: "Learn more";
             };
+            readonly faqCard: {
+                readonly title: "Questions before getting started";
+            };
         };
     };
     readonly select: {

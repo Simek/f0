@@ -395,6 +395,9 @@ const e = {
       },
       moduleCard: {
         actionLabel: "Learn more"
+      },
+      faqCard: {
+        title: "Questions before getting started"
       }
     }
   },

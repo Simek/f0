@@ -387,6 +387,15 @@ declare type AIButton = {
 };
 
 /**
+ * Disclaimer configuration for the chat input
+ */
+declare type AiChatDisclaimer = {
+    text: string;
+    link?: string;
+    linkText?: string;
+};
+
+/**
  * Props for the AiChatProvider component
  */
 declare type AiChatProviderProps = {
@@ -394,6 +403,12 @@ declare type AiChatProviderProps = {
     greeting?: string;
     initialMessage?: string | string[];
     welcomeScreenSuggestions?: WelcomeScreenSuggestion[];
+    disclaimer?: AiChatDisclaimer;
+    /**
+     * Enable resizable chat window
+     * When enabled, the chat can be resized between 300px and 50% of the screen width
+     */
+    resizable?: boolean;
     onThumbsUp?: (message: AIMessage, { threadId, feedback }: {
         threadId: string;
         feedback: string;
@@ -983,6 +998,10 @@ declare type ButtonInternalProps = Pick<ActionProps, "size" | "disabled" | "clas
      * The variant of the button.
      */
     variant?: ActionButtonVariant;
+    /**
+     * The filters'counter value to display.
+     */
+    counterValue?: number;
     /**
      * Callback fired when the button is clicked. Supports async functions for loading state.
      */
@@ -2493,6 +2512,9 @@ declare const defaultTranslations: {
             readonly moduleCard: {
                 readonly actionLabel: "Learn more";
             };
+            readonly faqCard: {
+                readonly title: "Questions before getting started";
+            };
         };
     };
     readonly select: {
@@ -2839,6 +2861,7 @@ export declare type EntitySelectSubEntity = {
     subName: string;
     subAvatar?: string;
     subSearchKeys?: string[];
+    subDeactivated?: boolean;
 };
 
 declare type Enumerate<N extends number, Acc extends number[] = []> = Acc["length"] extends N ? [...Acc, N][number] : Enumerate<N, [...Acc, Acc["length"]]>;
@@ -4589,6 +4612,8 @@ declare type OneFilterPickerRootProps<Definition extends FiltersDefinition> = {
     mode?: FiltersMode;
     /** Callback fired when filters open state is changed */
     onOpenChange?: (isOpen: boolean) => void;
+    /** Display counter for the applied filters */
+    displayCounter?: boolean;
 };
 
 /**
@@ -5251,6 +5276,7 @@ export declare interface RichTextEditorProps {
     height?: heightType;
     plainHtmlMode?: boolean;
     fullScreenMode?: boolean;
+    onFullscreenChange?: (fullscreen: boolean) => void;
 }
 
 declare interface RichTextEditorSkeletonProps {
