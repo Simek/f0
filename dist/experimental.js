@@ -16227,8 +16227,8 @@ const vc = (t, e, n, i) => {
   ref: e
 }), gv = be(SD), Xm = be(ND);
 function ED(t, e) {
-  if (e.field !== void 0 && e.field in t) {
-    const i = t[e.field];
+  if (e.id !== void 0 && e.id in t) {
+    const i = t[e.id];
     return i == null ? "" : String(i);
   }
   const n = e.render(t);
@@ -16240,9 +16240,9 @@ const TD = (t, e) => {
     _(i);
   }, [i]);
   const E = (I) => ED(C, I), T = (I, N) => {
-    const D = I.field !== void 0 ? {
+    const D = I.id !== void 0 ? {
       ...C,
-      [I.field]: N
+      [I.id]: N
     } : C;
     _(D), y?.(D);
   }, M = Y(() => ({

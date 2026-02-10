@@ -2290,13 +2290,18 @@ declare type EditableTableCellEditType = "text";
 
 declare type EditableTableCollectionProps<R extends RecordType, Filters extends FiltersDefinition, Sortings extends SortingsDefinition, Summaries extends SummariesDefinition, ItemActions extends ItemActionsDefinition<R>, NavigationFilters extends NavigationFiltersDefinition, Grouping extends GroupingDefinition<R>> = CollectionProps<R, Filters, Sortings, Summaries, ItemActions, NavigationFilters, Grouping, EditableTableVisualizationOptions<R, Filters, Sortings, Summaries>>;
 
-/** Column definition for Editable Table; optional `field` binds the cell input to item[field]. */
+/**
+ * Column definition for Editable Table.
+ *
+ * When `editType` is set, the column's `id` is used as the record key to
+ * read the initial value from `item[id]` and to merge the updated value
+ * back into the item passed to `onCellChange`.
+ */
 declare type EditableTableColumnDefinition<R extends RecordType, Sortings extends SortingsDefinition, Summaries extends SummariesDefinition> = TableColumnDefinition<R, Sortings, Summaries> & {
-    /** Key of the record to bind the cell input to; value comes from item[field]. */
-    field?: keyof R & string;
     /**
      * Determines how the cell is rendered in edit mode.
      * When set to `"text"`, the cell renders as an inline text input.
+     * The column `id` is used as the record key to read/write the value.
      * When omitted, the cell is rendered read-only using the standard `render` function.
      */
     editType?: EditableTableCellEditType;
