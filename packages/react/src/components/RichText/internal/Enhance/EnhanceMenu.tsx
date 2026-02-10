@@ -110,7 +110,9 @@ const AIEnhanceMenu = ({
                   "hover:after:scale-100 hover:after:opacity-80 has-[input:focus]:after:scale-100 has-[input:focus]:after:opacity-80",
                   "pl-4"
                 ),
-              compactReview && "border border-solid border-f1-border-secondary",
+              compactReview &&
+                !isIdle &&
+                "border border-solid border-f1-border-secondary",
               useCompactReview && "drop-shadow-sm"
             )}
             onClick={() => {
