@@ -9,6 +9,7 @@ import {
   DetailsContentExtension,
   DetailsExtension,
   DetailsSummaryExtension,
+  EnhanceHighlight,
   HighlightExtension,
   ImageExtension,
   LinkExtension,
@@ -32,6 +33,7 @@ interface CreateNotesTextEditorExtensionsProps {
   translations: I18nContextType
   aiBlockConfig?: AIBlockConfig
   imageUploadConfig?: ImageUploadConfig
+  enhanceEnabled?: boolean
 }
 
 export const createNotesTextEditorExtensions = ({
@@ -39,6 +41,7 @@ export const createNotesTextEditorExtensions = ({
   translations,
   aiBlockConfig,
   imageUploadConfig,
+  enhanceEnabled = false,
 }: CreateNotesTextEditorExtensionsProps) => {
   return [
     StarterKitExtension,
@@ -63,6 +66,7 @@ export const createNotesTextEditorExtensions = ({
     ...(imageUploadConfig
       ? [createFileHandlerExtension(imageUploadConfig)]
       : []),
+    ...(enhanceEnabled ? [EnhanceHighlight] : []),
     BlockIdExtension, // Automatically add unique IDs to all block nodes
     PersistSelection,
     createPlaceholderExtension(placeholder),

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
 import { EnhancementOption, FILE_TYPES, resultType, RichTextEditor } from "."
+import { Summary } from "@/icons/ai"
+import { Alert, Globe } from "@/icons/app"
 
 const meta = {
   component: RichTextEditor,
@@ -90,14 +92,17 @@ const enhancementOptions: EnhancementOption[] = [
   {
     id: "error",
     label: "This is gonna fail",
+    icon: Alert,
   },
   {
     id: "improve-writing",
     label: "Improve Writing",
+    icon: Summary,
   },
   {
     id: "change-tone",
     label: "Change Tone",
+    icon: Summary,
     subOptions: [
       {
         id: "tone-casual",
@@ -124,6 +129,7 @@ const enhancementOptions: EnhancementOption[] = [
   {
     id: "translate",
     label: "Translate",
+    icon: Globe,
     subOptions: [
       {
         id: "translate-to-spanish",

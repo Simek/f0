@@ -382,7 +382,7 @@ export const defaultTranslations = {
       blocks: "Blocks",
     },
     ai: {
-      enhanceButtonLabel: "Enhance",
+      enhanceButtonLabel: "Generate",
       loadingEnhanceLabel: "Loading...",
       defaultError: "An error occurred while loading",
       closeErrorButtonLabel: "Continue editing",

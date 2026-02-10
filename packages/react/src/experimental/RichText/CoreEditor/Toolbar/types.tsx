@@ -41,7 +41,6 @@ export interface ToolbarProps {
   editor: Editor
   isFullscreen?: boolean
   disableButtons: boolean
-  onClose?: () => void
   animationComplete?: boolean
   darkMode?: boolean
   showEmojiPicker?: boolean

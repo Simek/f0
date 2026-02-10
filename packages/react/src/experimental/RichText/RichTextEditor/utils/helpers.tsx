@@ -1,4 +1,4 @@
-import { Editor, JSONContent } from "@tiptap/react"
+import { Editor } from "@tiptap/react"
 import { RefObject } from "react"
 
 import { heightType, resultType } from "./types"
@@ -101,41 +101,28 @@ const setupContainerObservers = ({
 interface HandleEditorUpdateProps {
   editor: Editor
   onChange: (result: resultType) => void
-  setEditorState: (state: { html: string; json: JSONContent | null }) => void
 }
 
-const handleEditorUpdate = ({
-  editor,
-  onChange,
-  setEditorState,
-}: HandleEditorUpdateProps) => {
-  setEditorState({
-    html: editor.getHTML(),
-    json: null,
-  })
+const handleEditorUpdate = ({ editor, onChange }: HandleEditorUpdateProps) => {
+  if (editor.isEmpty) {
+    onChange({ value: null })
+    return
+  }
 
+  const html = editor.getHTML()
   const mentions: number[] = []
-  const doc = editor.state.doc
 
-  doc.descendants((node) => {
+  editor.state.doc.descendants((node) => {
     if (node.type.name === "mention") {
       mentions.push(Number(node.attrs.id))
     }
   })
 
-  if (editor.isEmpty) {
-    onChange({ value: null })
-  } else {
-    const html = editor.getHTML()
-    if (mentions.length > 0) {
-      onChange({
-        value: html,
-        mentionIds: mentions,
-      })
-    } else {
-      onChange({ value: html })
-    }
-  }
+  onChange(
+    mentions.length > 0
+      ? { value: html, mentionIds: mentions }
+      : { value: html }
+  )
 }
 
 interface SetEditorContentProps {
@@ -144,16 +131,13 @@ interface SetEditorContentProps {
 }
 
 const setEditorContent = ({ editor, content }: SetEditorContentProps) => {
-  if (!editor) return null
   editor.commands.setContent(content)
 }
 
 export {
-  checkContainerHeight,
   getHeight,
   getHeightThreshold,
   handleEditorUpdate,
-  isScrolledToBottom,
   setEditorContent,
   setupContainerObservers,
 }

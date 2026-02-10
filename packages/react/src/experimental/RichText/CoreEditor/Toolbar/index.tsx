@@ -2,7 +2,6 @@ import { Editor } from "@tiptap/react"
 import { compact } from "lodash"
 import { Fragment, ReactNode } from "react"
 
-import { F0Button } from "@/components/F0Button"
 import { F0ButtonToggle } from "@/components/F0ButtonToggle"
 import { Picker } from "@/experimental/Information/Reactions/Picker"
 import {
@@ -14,7 +13,6 @@ import {
   CheckDouble,
   ChevronDown,
   Code,
-  Cross,
   Ellipsis,
   Heading1,
   Heading2,
@@ -49,7 +47,6 @@ export const Toolbar = ({
   editor,
   isFullscreen = false,
   disableButtons,
-  onClose,
   animationComplete = true,
   darkMode = false,
   showEmojiPicker = true,
@@ -322,20 +319,6 @@ export const Toolbar = ({
 
   return (
     <div className={cn("flex flex-row items-start gap-2 overflow-hidden")}>
-      {onClose && (
-        <F0Button
-          onClick={(e) => {
-            e.preventDefault()
-            onClose()
-          }}
-          variant="neutral"
-          size="md"
-          disabled={disableButtons}
-          hideLabel
-          label={translations.actions.close}
-          icon={Cross}
-        />
-      )}
       <div
         className={cn(
           "flex grow flex-row items-center",

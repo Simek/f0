@@ -8,28 +8,29 @@
 }
 
 .preserved-selection {
-  @apply bg-f1-background-selected-bold/20;
+  @apply bg-f1-background-selected-hover;
 }
 
 .enhance-highlight {
-  background: linear-gradient(
-    90deg,
-    #e5561980,
-    #a1ade580,
-    #e5194380,
-    #e5561980
-  );
-  background-size: 300% 100%;
-  animation: enhance-gradient-move 3s linear infinite;
-  border-radius: 4px;
+  background-color: rgba(87, 0, 209, 0.1) !important;
 }
 
-@keyframes enhance-gradient-move {
+.enhance-highlight::selection,
+.enhance-highlight *::selection {
+  background-color: transparent !important;
+}
+
+.enhance-highlight::-moz-selection,
+.enhance-highlight *::-moz-selection {
+  background-color: transparent !important;
+}
+
+@keyframes enhance-highlight-border-flow {
   0% {
-    background-position: 0% 50%;
+    background-position: 0 100%;
   }
   100% {
-    background-position: 100% 50%;
+    background-position: 100% 100%;
   }
 }
 

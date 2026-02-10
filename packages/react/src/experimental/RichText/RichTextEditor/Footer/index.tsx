@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react"
 
 import { F0Button } from "@/components/F0Button"
 import { Toolbar } from "@/experimental/RichText/CoreEditor"
-import { Paperclip, TextSize } from "@/icons/app"
+import { Cross, Paperclip, TextSize } from "@/icons/app"
+import { useI18n } from "@/lib/providers/i18n/i18n-provider"
 
 import { EnhanceActivator } from "../Enhance"
 import {
@@ -26,15 +27,13 @@ interface FooterProps {
     customIntent?: string
   ) => Promise<void>
   isLoadingEnhance: boolean
+  isAcceptChangesOpen: boolean
+  onAcceptChanges: () => void
+  onRejectChanges: () => void
+  onRetryChanges: () => void
   disableButtons: boolean
   enhanceConfig: enhanceConfig | undefined
   isFullscreen: boolean
-  setLastIntent: (
-    lastIntent: {
-      selectedIntent?: string
-      customIntent?: string
-    } | null
-  ) => void
   setIsToolbarOpen: (isToolbarOpen: boolean) => void
   isToolbarOpen: boolean
   plainHtmlMode: boolean
@@ -49,14 +48,18 @@ const Footer = ({
   canUseFiles,
   onEnhanceWithAI,
   isLoadingEnhance,
+  isAcceptChangesOpen,
+  onAcceptChanges,
+  onRejectChanges,
+  onRetryChanges,
   enhanceConfig,
   isFullscreen,
-  setLastIntent,
   disableButtons,
   setIsToolbarOpen,
   isToolbarOpen,
   plainHtmlMode,
 }: FooterProps) => {
+  const i18n = useI18n()
   const [toolbarAnimationComplete, setToolbarAnimationComplete] =
     useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -117,16 +120,19 @@ const Footer = ({
         />
       )}
 
-      {enhanceConfig && (
+      {enhanceConfig && !isFullscreen && (
         <EnhanceActivator
-          editor={editor}
           onEnhanceWithAI={onEnhanceWithAI}
-          isLoadingEnhance={isLoadingEnhance}
           enhanceConfig={enhanceConfig}
-          disableButtons={disableButtons}
+          disabled={disableButtons}
           hideLabel={useLittleMode}
-          setLastIntent={setLastIntent}
-          position="top"
+          menuWidth={containerWidth}
+          menuContainerRef={containerRef}
+          isLoadingEnhance={isLoadingEnhance}
+          isAcceptChangesOpen={isAcceptChangesOpen}
+          onAcceptChanges={onAcceptChanges}
+          onRejectChanges={onRejectChanges}
+          onRetryChanges={onRetryChanges}
         />
       )}
 
@@ -159,25 +165,36 @@ const Footer = ({
             className="absolute left-0 top-0 z-10 h-full overflow-hidden bg-f1-background"
             aria-label="Rich text editor toolbar"
           >
-            <Toolbar
-              editor={editor}
-              isFullscreen={isFullscreen}
-              disableButtons={disableButtons}
-              onClose={() => {
-                setIsToolbarOpen(false)
-                setToolbarAnimationComplete(false)
-                // Restore focus after state update to trigger BubbleMenu
-                queueMicrotask(() => editor.commands.focus())
-              }}
-              animationComplete={toolbarAnimationComplete}
-              plainHtmlMode={plainHtmlMode}
-            />
+            <div className="flex items-start gap-2">
+              <F0Button
+                onClick={(e) => {
+                  e.preventDefault()
+                  setIsToolbarOpen(false)
+                  setToolbarAnimationComplete(false)
+                  // Restore focus after state update to trigger BubbleMenu
+                  queueMicrotask(() => editor.commands.focus())
+                }}
+                variant="neutral"
+                size="md"
+                disabled={disableButtons}
+                hideLabel
+                label={i18n.actions.close}
+                icon={Cross}
+              />
+              <Toolbar
+                editor={editor}
+                isFullscreen={isFullscreen}
+                disableButtons={disableButtons}
+                animationComplete={toolbarAnimationComplete}
+                plainHtmlMode={plainHtmlMode}
+              />
+            </div>
           </motion.div>
         )}
 
         {!isFullscreen && (
           <motion.div
-            className="flex items-center gap-2 overflow-hidden"
+            className="flex items-center gap-2"
             initial={{ opacity: 1 }}
             animate={{
               opacity: isToolbarOpen ? 0 : 1,

@@ -1,6 +1,7 @@
 import DragHandle from "@tiptap/extension-drag-handle-react"
 import { Node } from "@tiptap/pm/model"
 import { Editor, EditorContent, JSONContent, useEditor } from "@tiptap/react"
+import { AnimatePresence, motion } from "motion/react"
 import {
   forwardRef,
   useCallback,
@@ -17,7 +18,8 @@ import { F0Button } from "@/components/F0Button"
 import { ButtonInternal } from "@/components/F0Button/internal"
 import { F0Icon } from "@/components/F0Icon"
 import { EditorBubbleMenu } from "@/experimental/RichText/CoreEditor"
-import { Toolbar } from "@/experimental/RichText/CoreEditor"
+import { useEnhance } from "@/experimental/RichText/CoreEditor/Enhance"
+import type { enhanceConfig } from "@/experimental/RichText/CoreEditor/Enhance"
 import { Handle, Plus } from "@/icons/app"
 import { useI18n } from "@/lib/providers/i18n"
 import { ScrollArea } from "@/ui/scrollarea"
@@ -29,6 +31,7 @@ import {
   ImageUploadErrorType,
   insertImageFromFile,
 } from "../CoreEditor/Extensions/Image"
+import { Error as EnhanceError } from "../RichTextEditor/Error"
 import "./index.css"
 import { createNotesTextEditorExtensions } from "./extensions"
 import Header from "./Header"
@@ -50,6 +53,7 @@ interface NotesTextEditorProps {
   readonly?: boolean
   aiBlockConfig?: AIBlockConfig
   imageUploadConfig?: ImageUploadConfig
+  enhanceConfig?: enhanceConfig
   onTitleChange?: (title: string) => void
   titlePlaceholder?: string
   primaryAction?: PrimaryActionButton | PrimaryDropdownAction<string>
@@ -57,7 +61,6 @@ interface NotesTextEditorProps {
   otherActions?: DropdownItem[]
   metadata?: MetadataItem[]
   banner?: BannerProps
-  showBubbleMenu?: boolean
 }
 
 const NotesTextEditorComponent = forwardRef<
@@ -71,13 +74,13 @@ const NotesTextEditorComponent = forwardRef<
     readonly = false,
     aiBlockConfig,
     imageUploadConfig,
+    enhanceConfig: enhanceConfigProp,
     onTitleChange,
     primaryAction,
     secondaryActions,
     otherActions,
     metadata,
     banner,
-    showBubbleMenu = false,
     titlePlaceholder,
   },
   ref
@@ -124,6 +127,7 @@ const NotesTextEditorComponent = forwardRef<
             },
           }
         : undefined,
+      enhanceEnabled: !!enhanceConfigProp,
     }),
     content: initialContent,
     onUpdate: ({ editor }: { editor: Editor }) => {
@@ -135,6 +139,8 @@ const NotesTextEditorComponent = forwardRef<
     },
     editable: !readonly,
   })
+
+  const enhance = useEnhance(editor, enhanceConfigProp)
 
   useImperativeHandle(ref, () => ({
     clear: () => editor?.commands.clearContent(),
@@ -285,16 +291,23 @@ const NotesTextEditorComponent = forwardRef<
           </div>
         </div>
       )}
-      {!readonly && !showBubbleMenu && (
-        <div className="absolute bottom-8 left-1/2 z-50 max-w-[calc(100%-48px)] -translate-x-1/2 rounded-lg border border-solid border-f1-border-secondary bg-f1-background p-2 shadow-md">
-          <Toolbar
-            editor={editor}
-            disableButtons={false}
-            showEmojiPicker={false}
-            plainHtmlMode={false}
-          />
-        </div>
-      )}
+      <AnimatePresence>
+        {enhance.error && !enhance.isLoading && (
+          <motion.div
+            key="enhance-error"
+            initial={{ height: 0, opacity: 0, y: -20 }}
+            animate={{ height: "auto", opacity: 1, y: 0 }}
+            exit={{ height: 0, opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="mx-auto flex w-full max-w-[824px] items-center justify-center px-14 py-2"
+          >
+            <EnhanceError
+              error={enhance.error}
+              onDismiss={enhance.clearError}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <ScrollArea className="h-full gap-6">
         {showTitle && (
           <Title
@@ -347,10 +360,18 @@ const NotesTextEditorComponent = forwardRef<
         <EditorBubbleMenu
           editorId={editorId}
           editor={editor}
-          disableButtons={false}
-          isToolbarOpen={!showBubbleMenu}
+          disableButtons={enhance.disableButtons}
+          isToolbarOpen={false}
           isFullscreen={false}
           plainHtmlMode={false}
+          enhanceConfig={enhanceConfigProp}
+          onEnhanceWithAI={enhance.handleEnhanceWithAI}
+          isLoadingEnhance={enhance.isLoading}
+          isAcceptChangesOpen={enhance.isAcceptChangesOpen}
+          onAcceptChanges={enhance.acceptChanges}
+          onRejectChanges={enhance.rejectChanges}
+          onRetryChanges={enhance.retryChanges}
+          enhanceActive={!!enhance.error}
         />
       )}
     </div>
@@ -360,13 +381,11 @@ const NotesTextEditorComponent = forwardRef<
 interface NotesTextEditorSkeletonProps {
   withHeader?: boolean
   withTitle?: boolean
-  withToolbar?: boolean
 }
 
 export const NotesTextEditorSkeleton = ({
   withHeader = false,
   withTitle = true,
-  withToolbar = true,
 }: NotesTextEditorSkeletonProps) => {
   return (
     <div
@@ -383,31 +402,6 @@ export const NotesTextEditorSkeleton = ({
           <div className="flex items-center gap-2">
             <Skeleton className="h-8 w-16 rounded-md" />
             <Skeleton className="h-8 w-12 rounded-md" />
-          </div>
-        </div>
-      )}
-
-      {withToolbar && (
-        <div className="absolute bottom-8 left-1/2 z-50 flex -translate-x-1/2 flex-row items-center gap-[9px] rounded-lg bg-f1-background p-2 shadow-md">
-          <Skeleton className="h-8 w-8 rounded" />
-          <div className="flex items-center gap-0.5">
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-          </div>
-          <div className="flex items-center gap-0.5">
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-          </div>
-          <div className="flex items-center gap-0.5">
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
           </div>
         </div>
       )}
@@ -436,6 +430,10 @@ export const NotesTextEditorSkeleton = ({
 
 export type { Message, User } from "../CoreEditor/Extensions/Transcript"
 export type { ImageUploadConfig } from "./types"
+export type {
+  enhanceConfig,
+  EnhancementOption,
+} from "../CoreEditor/Enhance/types"
 export { NotesTextEditorComponent as NotesTextEditor }
 export type {
   NotesTextEditorHandle,
