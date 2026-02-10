@@ -2729,8 +2729,8 @@ declare type EditableTableColumnDefinition<R extends RecordType, Sortings extend
 
 declare type EditableTableVisualizationOptions<R extends RecordType, _Filters extends FiltersDefinition, Sortings extends SortingsDefinition, Summaries extends SummariesDefinition> = Omit<TableVisualizationOptions<R, _Filters, Sortings, Summaries>, "columns"> & {
     columns: ReadonlyArray<EditableTableColumnDefinition<R, Sortings, Summaries>>;
-    /** Called when a cell value changes; columnId is column.id ?? column.label. */
-    onCellChange?: (item: R, columnId: string, value: string) => void;
+    /** Called when a cell value changes with the full updated row. */
+    onCellChange?: (updatedItem: R) => void;
 };
 
 declare type EditableTableVisualizationSettings = TableVisualizationSettings;
@@ -6513,6 +6513,11 @@ declare module "gridstack" {
 }
 
 
+declare namespace Calendar {
+    var displayName: string;
+}
+
+
 declare module "@tiptap/core" {
     interface Commands<ReturnType> {
         aiBlock: {
@@ -6548,9 +6553,4 @@ declare module "@tiptap/core" {
             insertTranscript: (data: TranscriptData) => ReturnType;
         };
     }
-}
-
-
-declare namespace Calendar {
-    var displayName: string;
 }
