@@ -2710,12 +2710,21 @@ declare type DropdownProps = Omit<DropdownInternalProps, (typeof privateProps_4)
     onOpenChange?: (open: boolean) => void;
 };
 
+/** The edit mode for a column cell in the editable table. */
+declare type EditableTableCellEditType = "text";
+
 declare type EditableTableCollectionProps<R extends RecordType, Filters extends FiltersDefinition, Sortings extends SortingsDefinition, Summaries extends SummariesDefinition, ItemActions extends ItemActionsDefinition<R>, NavigationFilters extends NavigationFiltersDefinition, Grouping extends GroupingDefinition<R>> = CollectionProps<R, Filters, Sortings, Summaries, ItemActions, NavigationFilters, Grouping, EditableTableVisualizationOptions<R, Filters, Sortings, Summaries>>;
 
 /** Column definition for Editable Table; optional `field` binds the cell input to item[field]. */
 declare type EditableTableColumnDefinition<R extends RecordType, Sortings extends SortingsDefinition, Summaries extends SummariesDefinition> = TableColumnDefinition<R, Sortings, Summaries> & {
     /** Key of the record to bind the cell input to; value comes from item[field]. */
     field?: keyof R & string;
+    /**
+     * Determines how the cell is rendered in edit mode.
+     * When set to `"text"`, the cell renders as an inline text input.
+     * When omitted, the cell is rendered read-only using the standard `render` function.
+     */
+    editType?: EditableTableCellEditType;
 };
 
 declare type EditableTableVisualizationOptions<R extends RecordType, _Filters extends FiltersDefinition, Sortings extends SortingsDefinition, Summaries extends SummariesDefinition> = Omit<TableVisualizationOptions<R, _Filters, Sortings, Summaries>, "columns"> & {
@@ -6504,11 +6513,6 @@ declare module "gridstack" {
 }
 
 
-declare namespace Calendar {
-    var displayName: string;
-}
-
-
 declare module "@tiptap/core" {
     interface Commands<ReturnType> {
         aiBlock: {
@@ -6544,4 +6548,9 @@ declare module "@tiptap/core" {
             insertTranscript: (data: TranscriptData) => ReturnType;
         };
     }
+}
+
+
+declare namespace Calendar {
+    var displayName: string;
 }
