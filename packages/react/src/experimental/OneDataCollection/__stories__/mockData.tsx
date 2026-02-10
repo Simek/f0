@@ -217,19 +217,13 @@ export class MockDataCache<T extends MockUser> {
   }
 
   /**
-   * Update a single field on an item (e.g. for editable table cell changes).
+   * Replace an item in the cache with a new version.
    */
-  updateItemField(
-    itemId: string,
-    field: keyof T & string,
-    value: string
-  ): T | null {
-    const item = this.dataMap.get(itemId)
-    if (!item) return null
-    if (!(field in item)) return null
-    ;(item as Record<string, unknown>)[field] = value
+  updateItem(updatedItem: T): T | null {
+    if (!this.dataMap.has(updatedItem.id)) return null
+    this.dataMap.set(updatedItem.id, updatedItem)
     this.notify()
-    return item
+    return updatedItem
   }
 
   reset(newData: T[]) {
@@ -550,12 +544,9 @@ export const getMockVisualizations = (options?: {
         ],
         onCellChange: (() => {
           return options?.cache
-            ? (item: MockUser, columnId: string, value: string) => {
-                console.log("cache enabled: cell changed to ", item, value)
-                const field = columnId as keyof MockUser & string
-                if (Object.prototype.hasOwnProperty.call(item, field)) {
-                  options.cache!.updateItemField(item.id, field, value)
-                }
+            ? (updatedItem: MockUser) => {
+                console.log("cache enabled: cell changed", updatedItem)
+                options.cache!.updateItem(updatedItem)
               }
             : undefined
         })(),

@@ -68,8 +68,8 @@ Use `type: "editableTable"` in the `visualizations` prop:
             // No editType → cell is rendered read-only
           },
         ],
-        onCellChange: (item, columnId, value) => {
-          console.log("Cell changed", item.id, columnId, value)
+        onCellChange: (updatedItem) => {
+          console.log("Cell changed", updatedItem)
         },
         frozenColumns: 0,
         allowColumnReordering: true,
@@ -86,7 +86,7 @@ The Editable Table accepts the same base options as the Table visualization,
 plus editable-specific ones:
 
 - **columns** – Column definitions (extends the [Table column definition](/?path=/docs/components-data-collection-visualizations-table--documentation) with `editType` and `field`; see below).
-- **onCellChange** – `(item: R, columnId: string, value: string) => void`. Called whenever a user changes a cell value. `columnId` is the column's `id` (or `label` if no `id` is set).
+- **onCellChange** – `(updatedItem: R) => void`. Called whenever a user changes a cell value. `updatedItem` is the full row object with the edited field already updated.
 - **frozenColumns** – Number of columns to freeze on the left (`0`, `1`, or `2`).
 - **allowColumnReordering** – Let users reorder columns via settings.
 - **allowColumnHiding** – Let users show/hide columns via settings.
@@ -125,11 +125,12 @@ Controls whether a cell is editable and which input type to use:
 ### `field`
 
 When `field` is provided, the input value is initialized from `item[field]`.
-When the user types, the new value is reported via `onCellChange` along with the
-`columnId`, so you can update the backing data.
+When the user types, `onCellChange` is called with the full updated row (the
+edited field is already merged into the item), so you can update the backing
+data directly.
 
 If `field` is omitted, the initial value falls back to the string output of the
-column's `render` function.
+column's `render` function, and the item passed to `onCellChange` is unchanged.
 
 ### Example: mixing editable and read-only columns
 
@@ -162,7 +163,7 @@ columns: [
 | Column order/hidden state | Shared for "Table view" | Independent from Table |
 | Cell editing | Read-only | Supports inline editing via `editType` |
 | Item actions | Supported | Disabled (cells are interactive) |
-| `onCellChange` callback | N/A | Fires on every cell edit |
+| `onCellChange` callback | N/A | Fires on every cell edit with the updated row |
 | Use case | Default read-only table | Inline editing or a different default layout |
 
 You can offer both in the same collection; users switch via the visualization

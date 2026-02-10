@@ -48,8 +48,8 @@ export type EditableTableVisualizationOptions<
   "columns"
 > & {
   columns: ReadonlyArray<EditableTableColumnDefinition<R, Sortings, Summaries>>
-  /** Called when a cell value changes; columnId is column.id ?? column.label. */
-  onCellChange?: (item: R, columnId: string, value: string) => void
+  /** Called when a cell value changes with the full updated row. */
+  onCellChange?: (updatedItem: R) => void
 }
 
 export type EditableTableCollectionProps<

@@ -32,12 +32,10 @@ function useEditableTableData(
   const itemsRef = useRef(items)
   itemsRef.current = items
 
-  const onCellChange = (item: MockUser, columnId: string, value: string) => {
-    console.log("onCellChange", item, columnId, value)
-    const field = columnId as keyof MockUser & string
-    if (!Object.prototype.hasOwnProperty.call(item, field)) return
+  const onCellChange = (updatedItem: MockUser) => {
+    console.log("onCellChange", updatedItem)
     setItems((prev) =>
-      prev.map((i) => (i.id === item.id ? { ...i, [field]: value } : { ...i }))
+      prev.map((i) => (i.id === updatedItem.id ? updatedItem : i))
     )
   }
 

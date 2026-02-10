@@ -41,16 +41,6 @@ function getCellValue<R extends RecordType>(
   return ""
 }
 
-function getColumnId<R extends RecordType>(
-  column: EditableTableColumnDefinition<
-    R,
-    SortingsDefinition,
-    SummariesDefinition
-  >
-): string {
-  return column.id ?? column.label ?? "column"
-}
-
 export type EditableRowProps<
   R extends RecordType,
   Filters extends FiltersDefinition,
@@ -72,7 +62,7 @@ export type EditableRowProps<
   "columns"
 > & {
   columns: ReadonlyArray<EditableTableColumnDefinition<R, Sortings, Summaries>>
-  onCellChange?: (item: R, columnId: string, value: string) => void
+  onCellChange?: (updatedItem: R) => void
 }
 
 const EditableRowInner = <
@@ -120,12 +110,12 @@ const EditableRowInner = <
     nestedRowProps?.hasLoadedChildren === undefined ||
     nestedRowProps?.hasLoadedChildren
 
-  // Local cell values so typing updates immediately (parent/cache update is async)
-  const [localValues, setLocalValues] = useState<Record<string, string>>({})
+  // Local copy of the item so typing updates immediately (parent/cache update is async)
+  const [localItem, setLocalItem] = useState<R>(item)
 
-  // Sync from item when it changes from parent (e.g. different row or refetch with new item ref)
+  // Sync from parent when the item reference changes (e.g. different row or refetch)
   useEffect(() => {
-    setLocalValues({})
+    setLocalItem(item)
   }, [item])
 
   const getDisplayValue = (
@@ -135,9 +125,7 @@ const EditableRowInner = <
       SummariesDefinition
     >
   ) => {
-    const columnId = getColumnId(column)
-    if (columnId in localValues) return localValues[columnId]
-    return getCellValue(item, column)
+    return getCellValue(localItem, column)
   }
 
   const handleCellChange = (
@@ -148,9 +136,13 @@ const EditableRowInner = <
     >,
     value: string
   ) => {
-    const columnId = getColumnId(column)
-    setLocalValues((prev) => ({ ...prev, [columnId]: value }))
-    onCellChange?.(item, columnId, value)
+    const updatedItem =
+      column.field !== undefined
+        ? ({ ...localItem, [column.field]: value } as R)
+        : localItem
+
+    setLocalItem(updatedItem)
+    onCellChange?.(updatedItem)
   }
 
   const sourceWithoutItemActions = useMemo(
