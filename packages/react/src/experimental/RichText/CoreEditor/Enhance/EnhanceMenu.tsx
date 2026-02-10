@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/ui/dropdown-menu"
 
-import { EnhancementOption } from "../types"
+import { EnhancementOption } from "./types"
 
 interface AIEnhanceMenuProps {
   onSelect: ({
@@ -97,7 +97,7 @@ const AIEnhanceMenu = ({
         <DropdownMenuTrigger asChild>
           <motion.div
             className={cn(
-              "relative isolate drop-shadow-sm",
+              "relative isolate",
               "flex w-full flex-row items-center gap-2 rounded-md border-none bg-f1-background p-2 text-f1-foreground transition-all duration-200",
               isIdle &&
                 "outline outline-1 -outline-offset-1 outline-f1-border-secondary hover:outline-transparent has-[input:focus]:outline-transparent",
@@ -115,7 +115,8 @@ const AIEnhanceMenu = ({
               isIdle && "pl-4",
               !isIdle &&
                 useCompactReview &&
-                "border border-solid border-f1-border-secondary"
+                "border border-solid border-f1-border-secondary",
+              useCompactReview && "drop-shadow-sm"
             )}
             onClick={() => {
               customInputRef.current?.focus()
