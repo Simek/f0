@@ -29,3 +29,6 @@ export * from "./F0TableOfContentPopover"
 export * from "../sds/UpsellingKit/exports"
 // AI Components
 export * from "../ai/exports"
+// RichText Components
+export * from "./F0FileItem"
+export * from "./RichText/exports"

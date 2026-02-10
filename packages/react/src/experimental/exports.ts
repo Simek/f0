@@ -39,7 +39,11 @@ export * from "./OneEmptyState"
  */
 export * from "../ui/OnePagination"
 export * from "./Overlays/exports"
-export * from "./RichText/exports"
+/**
+ * @deprecated RichText components have moved to @/components/RichText. Import from there instead.
+ */
+export * from "../components/RichText/exports"
+export * from "../components/F0FileItem"
 export * from "./Utilities/exports"
 export * from "./Widgets/exports"
 /**

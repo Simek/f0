@@ -1,6 +1,6 @@
 import { ControllerRenderProps, FieldValues } from "react-hook-form"
 
-import { RichTextEditor } from "@/experimental/RichText/RichTextEditor"
+import { F0RichTextEditor } from "@/components/RichText/F0RichTextEditor"
 
 import type { F0RichTextField, RichTextValue } from "./types"
 
@@ -19,7 +19,7 @@ export function RichTextFieldRenderer({
   const currentValue = formField.value as RichTextValue | undefined
 
   return (
-    <RichTextEditor
+    <F0RichTextEditor
       title={field.label}
       placeholder={field.placeholder ?? ""}
       maxCharacters={field.maxCharacters}

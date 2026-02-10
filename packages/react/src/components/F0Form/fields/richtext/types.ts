@@ -1,5 +1,5 @@
-import type { MentionsConfig } from "@/experimental/RichText/CoreEditor"
-import type { heightType } from "@/experimental/RichText/RichTextEditor"
+import type { heightType } from "@/components/RichText/F0RichTextEditor"
+import type { MentionsConfig } from "@/components/RichText/internal"
 
 import type { F0BaseField, CommonRenderIfCondition } from "../types"
 
