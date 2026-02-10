@@ -31,8 +31,8 @@ function getCellValue<R extends RecordType>(
     SummariesDefinition
   >
 ): string {
-  if (column.field !== undefined && column.field in item) {
-    const v = item[column.field as keyof R]
+  if (column.id !== undefined && column.id in item) {
+    const v = item[column.id as keyof R]
     return v === null || v === undefined ? "" : String(v)
   }
   const rendered = column.render(item)
@@ -137,8 +137,8 @@ const EditableRowInner = <
     value: string
   ) => {
     const updatedItem =
-      column.field !== undefined
-        ? ({ ...localItem, [column.field]: value } as R)
+      column.id !== undefined
+        ? ({ ...localItem, [column.id]: value } as R)
         : localItem
 
     setLocalItem(updatedItem)

@@ -38,25 +38,25 @@ Use `type: "editableTable"` in the `visualizations` prop:
       options: {
         columns: [
           {
+            id: "name",
             label: "Name",
-            render: (item) => item.name,
-            field: "name",
             editType: "text",
+            render: (item) => item.name,
             sorting: "name",
             width: 140,
           },
           {
+            id: "email",
             label: "Email",
-            render: (item) => item.email,
-            field: "email",
             editType: "text",
+            render: (item) => item.email,
             sorting: "email",
           },
           {
+            id: "role",
             label: "Role",
-            render: (item) => item.role,
-            field: "role",
             editType: "text",
+            render: (item) => item.role,
             sorting: "role",
           },
           {
@@ -85,7 +85,7 @@ Use `type: "editableTable"` in the `visualizations` prop:
 The Editable Table accepts the same base options as the Table visualization,
 plus editable-specific ones:
 
-- **columns** – Column definitions (extends the [Table column definition](/?path=/docs/components-data-collection-visualizations-table--documentation) with `editType` and `field`; see below).
+- **columns** – Column definitions (extends the [Table column definition](/?path=/docs/components-data-collection-visualizations-table--documentation) with `editType`; see below).
 - **onCellChange** – `(updatedItem: R) => void`. Called whenever a user changes a cell value. `updatedItem` is the full row object with the edited field already updated.
 - **frozenColumns** – Number of columns to freeze on the left (`0`, `1`, or `2`).
 - **allowColumnReordering** – Let users reorder columns via settings.
@@ -93,23 +93,18 @@ plus editable-specific ones:
 
 ## Editable Table Column Definition
 
-The column definition extends the Table column definition with two additional
-properties:
+The column definition extends the Table column definition with one additional
+property:
 
 ```ts
 type EditableTableColumnDefinition<T> = TableColumnDefinition<T> & {
   /**
    * Determines how the cell is rendered in edit mode.
    * When set to "text", the cell renders as an inline text input.
+   * The column `id` is used as the record key to read/write the value.
    * When omitted, the cell is rendered read-only using the standard render function.
    */
   editType?: "text"
-
-  /**
-   * Key of the record to bind the cell input value to.
-   * The input value is initialized from item[field].
-   */
-  field?: keyof T & string
 }
 ```
 
@@ -119,18 +114,11 @@ Controls whether a cell is editable and which input type to use:
 
 | Value | Behavior |
 |-------|----------|
-| `"text"` | Renders an inline text `<Input>`. The user can type directly in the cell. |
+| `"text"` | Renders an inline text `<Input>`. The column's `id` is used as the record key — the input is initialized from `item[id]`, and the updated value is merged back into the item passed to `onCellChange`. |
 | _(omitted)_ | Cell is **read-only** — rendered with the standard `render` function, same as in the Table visualization. |
 
-### `field`
-
-When `field` is provided, the input value is initialized from `item[field]`.
-When the user types, `onCellChange` is called with the full updated row (the
-edited field is already merged into the item), so you can update the backing
-data directly.
-
-If `field` is omitted, the initial value falls back to the string output of the
-column's `render` function, and the item passed to `onCellChange` is unchanged.
+> **Note:** Editable columns must have an `id` that matches a key on the record
+> type so the component can read and write the value.
 
 ### Example: mixing editable and read-only columns
 
@@ -139,8 +127,7 @@ columns: [
   {
     id: "name",
     label: "Name",
-    field: "name",
-    editType: "text",           // ← editable text input
+    editType: "text",           // ← editable: reads/writes item.name
     render: (item) => item.name,
   },
   {

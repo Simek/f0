@@ -434,7 +434,6 @@ export const getMockVisualizations = (options?: {
           },
           {
             label: "Email",
-            field: "email",
             editType: "text",
             render: (item) => item.email,
             sorting: options?.table?.noSorting ? undefined : "email",
@@ -442,7 +441,6 @@ export const getMockVisualizations = (options?: {
           },
           {
             label: "Role",
-            field: "role",
             editType: "text",
             render: (item) => item.role,
             sorting: options?.table?.noSorting ? undefined : "role",
@@ -453,7 +451,6 @@ export const getMockVisualizations = (options?: {
           {
             id: "department",
             label: "Department",
-            field: "department",
             editType: "text",
             render: (item) => item.department,
             sorting: options?.table?.noSorting ? undefined : "department",
