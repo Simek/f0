@@ -86,7 +86,7 @@ The Editable Table accepts the same base options as the Table visualization,
 plus editable-specific ones:
 
 - **columns** – Column definitions (extends the [Table column definition](/?path=/docs/components-data-collection-visualizations-table--documentation) with `editType`; see below).
-- **onCellChange** – `(updatedItem: R) => void`. Called whenever a user changes a cell value. `updatedItem` is the full row object with the edited field already updated.
+- **onCellChange** – `(updatedItem: R) => void | Promise<void>`. Called whenever a user changes a cell value. `updatedItem` is the full row object with the edited field already updated. If the returned promise rejects, the cell displays an error state (see [Error handling](#error-handling) below).
 - **frozenColumns** – Number of columns to freeze on the left (`0`, `1`, or `2`).
 - **allowColumnReordering** – Let users reorder columns via settings.
 - **allowColumnHiding** – Let users show/hide columns via settings.
@@ -141,6 +141,26 @@ columns: [
   },
 ]
 ```
+
+## Error handling
+
+`onCellChange` can return a `Promise`. If the promise rejects, the cell that
+triggered the change displays an error state with the error message. The error
+is cleared automatically when:
+
+- The user edits the cell again.
+- The parent provides a new `item` reference (e.g. after a successful refetch).
+
+```tsx
+onCellChange: async (updatedItem) => {
+  const response = await api.updateUser(updatedItem)
+  if (!response.ok) {
+    throw new Error("Invalid value")
+  }
+}
+```
+
+<Canvas of={EditableTableStories.EditableTableWithErrors} />
 
 ## Table vs Editable Table
 

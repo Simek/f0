@@ -62,7 +62,7 @@ export type EditableRowProps<
   "columns"
 > & {
   columns: ReadonlyArray<EditableTableColumnDefinition<R, Sortings, Summaries>>
-  onCellChange?: (updatedItem: R) => void
+  onCellChange?: (updatedItem: R) => void | Promise<void>
 }
 
 const EditableRowInner = <
@@ -113,9 +113,13 @@ const EditableRowInner = <
   // Local copy of the item so typing updates immediately (parent/cache update is async)
   const [localItem, setLocalItem] = useState<R>(item)
 
+  // Per-column error messages (keyed by column id)
+  const [cellErrors, setCellErrors] = useState<Record<string, string>>({})
+
   // Sync from parent when the item reference changes (e.g. different row or refetch)
   useEffect(() => {
     setLocalItem(item)
+    setCellErrors({})
   }, [item])
 
   const getDisplayValue = (
@@ -142,7 +146,39 @@ const EditableRowInner = <
         : localItem
 
     setLocalItem(updatedItem)
-    onCellChange?.(updatedItem)
+
+    // Clear previous error for this column
+    if (column.id && column.id in cellErrors) {
+      setCellErrors((prev) => {
+        const { [column.id!]: _, ...rest } = prev
+        return rest
+      })
+    }
+
+    try {
+      const result = onCellChange?.(updatedItem)
+
+      // Handle async onCellChange that returns a rejected promise
+      if (result instanceof Promise) {
+        result.catch((error: unknown) => {
+          if (column.id) {
+            setCellErrors((prev) => ({
+              ...prev,
+              [column.id!]:
+                error instanceof Error ? error.message : "Save failed",
+            }))
+          }
+        })
+      }
+    } catch (error) {
+      // Handle synchronous errors
+      if (column.id) {
+        setCellErrors((prev) => ({
+          ...prev,
+          [column.id!]: error instanceof Error ? error.message : "Save failed",
+        }))
+      }
+    }
   }
 
   const sourceWithoutItemActions = useMemo(
@@ -233,6 +269,7 @@ const EditableRowInner = <
                 hideLabel
                 value={getDisplayValue(column)}
                 onChange={(value) => handleCellChange(column, value)}
+                error={column.id ? cellErrors[column.id] : undefined}
               />
             ) : (
               renderProperty(item, column, "editableTable", i18n)

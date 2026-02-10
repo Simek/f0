@@ -124,6 +124,48 @@ export const EditableTableWithColumnSettings: Story = {
   },
 }
 
+export const EditableTableWithErrors: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Editable table where the Email column always fails to save, showing an error state on the input.",
+      },
+    },
+  },
+  render: () => {
+    const mockVisualizations = getMockVisualizations()
+    const { dataAdapter } = useEditableTableData()
+
+    const onCellChange = async (_updatedItem: MockUser) => {
+      // Simulate an API call that always fails
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      throw new Error("Invalid value")
+    }
+
+    return (
+      <ExampleComponent
+        visualizations={[
+          {
+            type: "editableTable" as const,
+            options: {
+              ...(
+                mockVisualizations.editableTable as Extract<
+                  typeof mockVisualizations.editableTable,
+                  { type: "editableTable" }
+                >
+              ).options,
+              onCellChange,
+            },
+          },
+        ]}
+        dataAdapter={dataAdapter}
+        id="editable-table-errors/v1"
+      />
+    )
+  },
+}
+
 export const TableAndEditableTable: Story = {
   parameters: {
     docs: {
