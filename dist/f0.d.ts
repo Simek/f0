@@ -88,6 +88,7 @@ import { RefAttributes } from 'react';
 import { RefObject } from 'react';
 import { RemoteAudioTrack } from 'livekit-client';
 import { SearchFilterOptions } from './SearchFilter/SearchFilter';
+import { SizeToken as SizeToken_2 } from './types';
 import { StatusCellValue } from '../../../ui/value-display/types/status';
 import { StatusCellValue as StatusCellValue_2 } from './types/status';
 import { SVGProps } from 'react';
@@ -452,6 +453,9 @@ declare type AlertTagProps = ComponentProps<typeof F0TagAlert>;
 
 export declare type AlertVariant = "info" | "warning" | "critical" | "neutral" | "positive";
 
+/** Flex align items */
+export declare type AlignItemsToken = "start" | "center" | "end" | "stretch" | "baseline";
+
 declare const _allowedVariants: readonly ["heading", "heading-large"];
 
 declare const _allowedVariants_2: readonly ["body", "description", "small", "inverse", "code", "label"];
@@ -562,6 +566,9 @@ declare type AwaitProps<T> = {
     className?: string;
     children: (value: T) => ReactNode;
 };
+
+/** Background tokens mapped to the f1 theme */
+export declare type BackgroundToken = "transparent" | "primary" | "secondary" | "tertiary" | "inverse" | "inverse-secondary" | "bold" | "accent" | "accent-bold" | "promote" | "critical" | "critical-bold" | "info" | "info-bold" | "warning" | "warning-bold" | "positive" | "positive-bold" | "selected" | "selected-secondary" | "selected-bold" | "overlay";
 
 declare interface BadgeProps extends VariantProps<typeof badgeVariants> {
     icon: IconType;
@@ -790,6 +797,84 @@ export declare type BooleanRenderIfCondition = BooleanRenderIfBase & ({
 } | {
     isEmpty: boolean;
 });
+
+/** Border color tokens mapped to the f1 theme */
+export declare type BorderColorToken = "default" | "secondary" | "bold" | "selected" | "selected-bold" | "critical" | "critical-bold" | "warning" | "warning-bold" | "info" | "info-bold" | "positive" | "positive-bold" | "promote";
+
+/** Border radius tokens from core */
+export declare type BorderRadiusToken = "none" | "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+
+/** Border style */
+export declare type BorderStyleToken = "solid" | "dashed" | "dotted" | "double" | "none";
+
+/** Border width tokens */
+export declare type BorderWidthToken = "none" | "default" | "thick";
+
+declare type BoxVariantProps = VariantProps<typeof boxVariants>;
+
+declare const boxVariants: (props?: ({
+    divider?: "x" | "y" | undefined;
+    dividerColor?: "info" | "bold" | "default" | "secondary" | "critical" | "warning" | "positive" | "promote" | "selected" | "critical-bold" | "info-bold" | "warning-bold" | "positive-bold" | "selected-bold" | undefined;
+    overflow?: "hidden" | "auto" | "scroll" | "visible" | undefined;
+    overflowX?: "hidden" | "auto" | "scroll" | "visible" | undefined;
+    overflowY?: "hidden" | "auto" | "scroll" | "visible" | undefined;
+    borderColor?: "info" | "bold" | "default" | "secondary" | "critical" | "warning" | "positive" | "promote" | "selected" | "critical-bold" | "info-bold" | "warning-bold" | "positive-bold" | "selected-bold" | undefined;
+    border?: "default" | "none" | "thick" | undefined;
+    borderTop?: "default" | "none" | "thick" | undefined;
+    borderBottom?: "default" | "none" | "thick" | undefined;
+    borderLeft?: "default" | "none" | "thick" | undefined;
+    borderRight?: "default" | "none" | "thick" | undefined;
+    borderRadius?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "full" | "2xs" | undefined;
+    borderRadiusTopLeft?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "full" | "2xs" | undefined;
+    borderRadiusTopRight?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "full" | "2xs" | undefined;
+    borderRadiusBottomLeft?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "full" | "2xs" | undefined;
+    borderRadiusBottomRight?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "full" | "2xs" | undefined;
+    borderStyle?: "none" | "dashed" | "dotted" | "double" | "solid" | undefined;
+    background?: "info" | "bold" | "secondary" | "inverse" | "critical" | "accent" | "warning" | "positive" | "promote" | "selected" | "critical-bold" | "transparent" | "overlay" | "primary" | "tertiary" | "inverse-secondary" | "accent-bold" | "info-bold" | "warning-bold" | "positive-bold" | "selected-secondary" | "selected-bold" | undefined;
+    width?: SizeToken_2 | undefined;
+    height?: SizeToken_2 | undefined;
+    minWidth?: SizeToken_2 | undefined;
+    minHeight?: SizeToken_2 | undefined;
+    maxWidth?: SizeToken_2 | undefined;
+    maxHeight?: SizeToken_2 | undefined;
+    columns?: "1" | "2" | "3" | "4" | "none" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | undefined;
+    rows?: "1" | "2" | "3" | "4" | "none" | "5" | "6" | undefined;
+    colSpan?: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "full" | undefined;
+    colStart?: "1" | "2" | "3" | "4" | "auto" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | undefined;
+    rowSpan?: "1" | "2" | "3" | "4" | "5" | "6" | "full" | undefined;
+    gap?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    alignItems?: "center" | "end" | "baseline" | "start" | "stretch" | undefined;
+    justifyContent?: "center" | "end" | "start" | "between" | "stretch" | "around" | "evenly" | undefined;
+    flexDirection?: "row" | "column" | "column-reverse" | "row-reverse" | undefined;
+    flexWrap?: "wrap" | "nowrap" | "wrap-reverse" | undefined;
+    grow?: boolean | undefined;
+    shrink?: boolean | undefined;
+    margin?: "lg" | "md" | "sm" | "xs" | "none" | "auto" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    marginX?: "lg" | "md" | "sm" | "xs" | "none" | "auto" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    marginY?: "lg" | "md" | "sm" | "xs" | "none" | "auto" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    marginTop?: "lg" | "md" | "sm" | "xs" | "none" | "auto" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    marginBottom?: "lg" | "md" | "sm" | "xs" | "none" | "auto" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    marginLeft?: "lg" | "md" | "sm" | "xs" | "none" | "auto" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    marginRight?: "lg" | "md" | "sm" | "xs" | "none" | "auto" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    padding?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    paddingX?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    paddingY?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    paddingTop?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    paddingBottom?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    paddingLeft?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    paddingRight?: "lg" | "md" | "sm" | "xs" | "none" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | undefined;
+    display?: "block" | "grid" | "none" | "inline" | "flex" | "inline-flex" | undefined;
+    position?: "fixed" | "sticky" | "absolute" | "relative" | "static" | undefined;
+} & ({
+    class?: ClassValue;
+    className?: never;
+} | {
+    class?: never;
+    className?: ClassValue;
+})) | undefined) => string;
+
+/** Supported breakpoints */
+export declare type Breakpoint = "sm" | "md" | "lg" | "xl";
 
 export declare const buildTranslations: (translations: TranslationsType) => TranslationsType;
 
@@ -1324,6 +1409,15 @@ declare type CollectionVisualizations<Record extends RecordType, Filters extends
 };
 
 declare const collectionVisualizations: CollectionVisualizations<RecordType, FiltersDefinition, SortingsDefinition, SummariesDefinition, ItemActionsDefinition<RecordType>, NavigationFiltersDefinition, GroupingDefinition<RecordType>>;
+
+/** Grid column span for children (1–12 + full) */
+export declare type ColSpanToken = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "full";
+
+/** Grid column start position (1–13 + auto) */
+export declare type ColStartToken = "auto" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13";
+
+/** Grid column count (1–12) */
+export declare type ColumnsToken = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "none";
 
 declare type ColumnWidth = keyof typeof columnWidths | number;
 
@@ -2424,6 +2518,9 @@ export declare type DialogWidth = (typeof dialogWidths)[number];
 
 declare const dialogWidths: readonly ["sm", "md", "lg", "xl"];
 
+/** Display modes */
+export declare type DisplayToken = "block" | "flex" | "inline" | "inline-flex" | "grid" | "none";
+
 /**
  * Remove a property from a union of objects.
  * @example
@@ -2439,6 +2536,9 @@ declare const dialogWidths: readonly ["sm", "md", "lg", "xl"];
  * // { age: number } | { height: number }
  */
 declare type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
+
+/** Divider direction */
+export declare type DividerToken = "x" | "y";
 
 export declare interface DndDriver<T = unknown> {
     registerDraggable: (el: HTMLElement, options: {
@@ -2952,6 +3052,19 @@ export declare type F0BooleanConfig = F0BooleanCheckboxConfig | F0BooleanSwitchC
 declare type F0BooleanSwitchConfig = F0BaseConfig & F0SwitchConfig & {
     fieldType?: "switch";
 };
+
+export declare const F0Box: ForwardRefExoticComponent<Omit<F0BoxProps & RefAttributes<HTMLDivElement>, "ref"> & RefAttributes<HTMLElement | SVGElement>>;
+
+export declare interface F0BoxProps extends Omit<React.ComponentPropsWithoutRef<"div">, "display" | "width" | "height" | "border" | "className" | "style">, BoxVariantProps {
+    /** Responsive overrides applied from the `sm` breakpoint (≥640px) */
+    sm?: ResponsiveStyleProps;
+    /** Responsive overrides applied from the `md` breakpoint (≥768px) */
+    md?: ResponsiveStyleProps;
+    /** Responsive overrides applied from the `lg` breakpoint (≥1024px) */
+    lg?: ResponsiveStyleProps;
+    /** Responsive overrides applied from the `xl` breakpoint (≥1280px) */
+    xl?: ResponsiveStyleProps;
+}
 
 export declare const F0Button: ForwardRefExoticComponent<Omit<ButtonInternalProps, "style" | "className" | "variant" | "pressed" | "append" | "compact" | "noAutoTooltip" | "noTitle"> & {
 variant?: Exclude<ButtonInternalProps["variant"], "ai">;
@@ -4451,11 +4564,20 @@ export declare type FlagAvatarVariant = Extract<AvatarVariant, {
     type: "flag";
 }>;
 
+/** Flex direction */
+export declare type FlexDirectionToken = "row" | "column" | "row-reverse" | "column-reverse";
+
+/** Flex wrap */
+export declare type FlexWrapToken = "nowrap" | "wrap" | "wrap-reverse";
+
 declare type FontSize = (typeof fontSizes)[number];
 
 declare const fontSizes: readonly ["sm", "md", "lg"];
 
 /* Excluded from this release type: FormDefinitionItem */
+
+/** Fraction tokens for proportional widths */
+export declare type FractionToken = "1/2" | "1/3" | "2/3" | "1/4" | "2/4" | "3/4" | "1/5" | "2/5" | "3/5" | "4/5" | "1/6" | "5/6";
 
 export declare const FullscreenChatContext: Context<FullscreenChatContextType>;
 
@@ -4466,6 +4588,25 @@ declare type FullscreenChatContextType = {
     inProgress: boolean;
     setInProgress: (value: boolean) => void;
 };
+
+/**
+ * Gap tokens for spacing between flex/grid children.
+ * Uses betweenSpacing (rem) for sm–xl, absoluteSpacing (px) for extended sizes.
+ *
+ * | Token | Tailwind | Value  |
+ * |-------|----------|--------|
+ * | none  | gap-0    | 0px    |
+ * | xs    | gap-0.5  | 2px    |
+ * | sm    | gap-sm   | ~4px   | (0.25rem)
+ * | md    | gap-md   | ~8px   | (0.5rem)
+ * | lg    | gap-lg   | ~12px  | (0.75rem)
+ * | xl    | gap-xl   | ~16px  | (1rem)
+ * | 2xl   | gap-6    | 24px   |
+ * | 3xl   | gap-8    | 32px   |
+ * | 4xl   | gap-10   | 40px   |
+ * | 5xl   | gap-12   | 48px   |
+ */
+export declare type GapToken = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
 
 /**
  * Generates an anchor ID for a form element
@@ -4929,6 +5070,9 @@ declare type ItemDefinition = {
 
 declare type Join<T extends string[], D extends string> = T extends [] ? never : T extends [infer F] ? F : T extends [infer F, ...infer R] ? F extends string ? `${F}${D}${Join<Extract<R, string[]>, D>}` : never : string;
 
+/** Flex justify content */
+export declare type JustifyContentToken = "start" | "center" | "end" | "between" | "around" | "evenly" | "stretch";
+
 declare type KanbanCollectionProps<Record extends RecordType, Filters extends FiltersDefinition, Sortings extends SortingsDefinition, Summaries extends SummariesDefinition, ItemActions extends ItemActionsDefinition<Record>, NavigationFilters extends NavigationFiltersDefinition, Grouping extends GroupingDefinition<Record>> = CollectionProps<Record, Filters, Sortings, Summaries, ItemActions, NavigationFilters, Grouping, KanbanVisualizationOptions<Record, Filters, Sortings>>;
 
 declare type KanbanLaneDefinition = {
@@ -5049,6 +5193,9 @@ declare type ListVisualizationOptions<R extends RecordType, _Filters extends Fil
 export declare interface LoadingStateProps {
     label: string;
 }
+
+/** Margin tokens (spacing + auto for centering) */
+export declare type MarginToken = SpacingToken | "auto";
 
 declare const MAX_EXPANDED_ACTIONS = 2;
 
@@ -5329,6 +5476,12 @@ declare type NumericFormatterOptions = {
 };
 
 /**
+ * Numeric size scale matching core spacing (relativeSpacing).
+ * Maps 1:1 to Tailwind classes like w-0, w-4, w-8, w-16, etc.
+ */
+export declare type NumericSizeToken = "0" | "0.5" | "1" | "1.5" | "2" | "2.5" | "3" | "3.5" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "14" | "16" | "18" | "20" | "24" | "28" | "32" | "36" | "40" | "44" | "48" | "52" | "56" | "60" | "64" | "72" | "80" | "96";
+
+/**
  * Represents a numeric value that can be formatted with optional units.
  *
  * The value can be provided in two formats:
@@ -5448,6 +5601,9 @@ export declare type OnSelectItemsCallback<R extends RecordType, Filters extends 
 
 declare type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
+/** Overflow values */
+export declare type OverflowToken = "visible" | "hidden" | "auto" | "scroll";
+
 export declare function P({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>): JSX_2.Element;
 
 /**
@@ -5545,6 +5701,9 @@ declare type PersonTagProps = ComponentProps<typeof F0TagPerson>;
 export declare const PieChart: ForwardRefExoticComponent<Omit<PieChartProps & RefAttributes<HTMLDivElement>, "ref"> & RefAttributes<HTMLElement | SVGElement>>;
 
 declare type PopupSize = "sm" | "md" | "lg";
+
+/** CSS position */
+export declare type PositionToken = "static" | "relative" | "absolute" | "fixed" | "sticky";
 
 export declare function Pre({ children, ...props }: React.HTMLAttributes<HTMLPreElement>): JSX_2.Element;
 
@@ -5840,6 +5999,62 @@ export declare type RenderIfCondition = CommonRenderIfCondition | TextRenderIfCo
 
 export declare type ResolvedRecordType<R> = R extends RecordType ? R : RecordType;
 
+/** All styling props that can be overridden per breakpoint */
+export declare interface ResponsiveStyleProps {
+    display?: DisplayToken;
+    position?: PositionToken;
+    padding?: SpacingToken;
+    paddingX?: SpacingToken;
+    paddingY?: SpacingToken;
+    paddingTop?: SpacingToken;
+    paddingBottom?: SpacingToken;
+    paddingLeft?: SpacingToken;
+    paddingRight?: SpacingToken;
+    margin?: MarginToken;
+    marginX?: MarginToken;
+    marginY?: MarginToken;
+    marginTop?: MarginToken;
+    marginBottom?: MarginToken;
+    marginLeft?: MarginToken;
+    marginRight?: MarginToken;
+    gap?: GapToken;
+    columns?: ColumnsToken;
+    rows?: RowsToken;
+    colSpan?: ColSpanToken;
+    colStart?: ColStartToken;
+    rowSpan?: RowSpanToken;
+    width?: SizeToken;
+    height?: SizeToken;
+    minWidth?: SizeToken;
+    minHeight?: SizeToken;
+    maxWidth?: SizeToken;
+    maxHeight?: SizeToken;
+    background?: BackgroundToken;
+    borderColor?: BorderColorToken;
+    border?: BorderWidthToken;
+    borderTop?: BorderWidthToken;
+    borderBottom?: BorderWidthToken;
+    borderLeft?: BorderWidthToken;
+    borderRight?: BorderWidthToken;
+    borderRadius?: BorderRadiusToken;
+    borderRadiusTopLeft?: BorderRadiusToken;
+    borderRadiusTopRight?: BorderRadiusToken;
+    borderRadiusBottomLeft?: BorderRadiusToken;
+    borderRadiusBottomRight?: BorderRadiusToken;
+    borderStyle?: BorderStyleToken;
+    overflow?: OverflowToken;
+    overflowX?: OverflowToken;
+    overflowY?: OverflowToken;
+    divider?: DividerToken;
+    dividerColor?: BorderColorToken;
+    alignItems?: AlignItemsToken;
+    justifyContent?: JustifyContentToken;
+    flexDirection?: FlexDirectionToken;
+    flexWrap?: FlexWrapToken;
+    grow?: boolean;
+    shrink?: boolean;
+}
+
 /**
  * All valid renderIf conditions for richtext fields
  */
@@ -5856,6 +6071,12 @@ export declare interface RichTextValue {
 }
 
 /* Excluded from this release type: RowDefinition */
+
+/** Grid row span for children (1–6 + full) */
+export declare type RowSpanToken = "1" | "2" | "3" | "4" | "5" | "6" | "full";
+
+/** Grid row count (1–6 + none) */
+export declare type RowsToken = "1" | "2" | "3" | "4" | "5" | "6" | "none";
 
 export declare type SearchFilterDefinition = BaseFilterDefinition<"search">;
 
@@ -6002,6 +6223,9 @@ declare type SelectValueType = string | number;
  */
 declare type SimpleResult<T> = T[];
 
+/** Size tokens for width/height/min/max dimensions */
+export declare type SizeToken = "auto" | "full" | "screen" | "min" | "max" | "fit" | NumericSizeToken | FractionToken;
+
 /**
  * Type helper to extract keys from a SortingsDefinition
  */
@@ -6025,6 +6249,29 @@ export declare type SortingsStateMultiple = {
 }[];
 
 export declare type SortOrder = "asc" | "desc";
+
+/**
+ * Token types for F0Box props.
+ * These map to the design tokens defined in @factorialco/f0-core.
+ */
+/**
+ * Spacing tokens for padding and margin.
+ * Maps to the project's absoluteSpacing scale (px values).
+ *
+ * | Token | Tailwind | Value |
+ * |-------|----------|-------|
+ * | none  | p-0      | 0px   |
+ * | xs    | p-1      | 4px   |
+ * | sm    | p-2      | 8px   |
+ * | md    | p-3      | 12px  |
+ * | lg    | p-4      | 16px  |
+ * | xl    | p-6      | 24px  |
+ * | 2xl   | p-8      | 32px  |
+ * | 3xl   | p-10     | 40px  |
+ * | 4xl   | p-12     | 48px  |
+ * | 5xl   | p-16     | 64px  |
+ */
+export declare type SpacingToken = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
 
 declare type SrcProps = Pick<ImgHTMLAttributes<HTMLImageElement>, "src" | "srcSet" | "sizes">;
 
