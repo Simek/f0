@@ -28,9 +28,11 @@ import { cn } from "@/lib/utils"
 import "../index.css"
 import { Skeleton } from "@/ui/skeleton"
 
-import { useEnhance } from "./Enhance/useEnhance"
-import { EnhanceActivator } from "./Enhance"
-import { Error } from "./components/Error"
+import {
+  EnhanceActivator,
+  useEnhance,
+} from "@/components/RichText/internal/Enhance"
+import { EnhanceErrorBanner } from "@/components/RichText/internal/Error"
 import { FileList } from "./components/FileList"
 import { Footer } from "./components/Footer"
 import { Head } from "./components/Head"
@@ -39,7 +41,6 @@ import {
   getHeight,
   getHeightThreshold,
   handleEditorUpdate,
-  setEditorContent,
   setupContainerObservers,
 } from "./utils/helpers"
 import {
@@ -202,9 +203,7 @@ const F0RichTextEditorComponent = forwardRef<
       enhance.setError(errorMessage)
     },
     setContent: (content: string) => {
-      if (editor) {
-        setEditorContent({ editor, content })
-      }
+      editor?.commands.setContent(content)
     },
   }))
 
@@ -351,7 +350,10 @@ const F0RichTextEditorComponent = forwardRef<
                 transition={{ duration: 0.3 }}
                 className="flex w-full items-center justify-center pt-2"
               >
-                <Error error={enhance.error} onDismiss={enhance.clearError} />
+                <EnhanceErrorBanner
+                  error={enhance.error}
+                  onDismiss={enhance.clearError}
+                />
               </motion.div>
             )}
           </AnimatePresence>

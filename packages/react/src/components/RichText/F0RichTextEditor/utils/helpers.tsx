@@ -125,19 +125,9 @@ const handleEditorUpdate = ({ editor, onChange }: HandleEditorUpdateProps) => {
   )
 }
 
-interface SetEditorContentProps {
-  editor: Editor
-  content: string
-}
-
-const setEditorContent = ({ editor, content }: SetEditorContentProps) => {
-  editor.commands.setContent(content)
-}
-
 export {
   getHeight,
   getHeightThreshold,
   handleEditorUpdate,
-  setEditorContent,
   setupContainerObservers,
 }

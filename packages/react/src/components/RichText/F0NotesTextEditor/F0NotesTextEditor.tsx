@@ -14,8 +14,6 @@ import {
 } from "react"
 
 import { F0Alert, F0AlertProps } from "@/components/F0Alert"
-import { F0AvatarAlert } from "@/components/avatars/F0AvatarAlert"
-import { F0Button } from "@/components/F0Button"
 import { ButtonInternal } from "@/components/F0Button/internal"
 import { F0Icon } from "@/components/F0Icon"
 import { EditorBubbleMenu } from "@/components/RichText/internal"
@@ -32,12 +30,12 @@ import {
   ImageUploadErrorType,
   insertImageFromFile,
 } from "../internal/Extensions/Image"
-import { Error as EnhanceError } from "../F0RichTextEditor/components/Error"
+import { EnhanceErrorBanner } from "../internal/Error"
 import "./index.css"
 import { createNotesTextEditorExtensions } from "./extensions"
-import Header from "./components/Header"
-import Title from "./components/Title"
-import { HeaderStatusProps } from "./components/Header"
+import { Header, HeaderStatusProps } from "./components/Header"
+import { ImageUploadError } from "./components/ImageUploadError"
+import { Title } from "./components/Title"
 import {
   DropdownItem,
   HeaderSecondaryAction,
@@ -97,19 +95,6 @@ const F0NotesTextEditorComponent = forwardRef<
   const [initialContent] = useState(() => initialEditorState?.content || "")
   const [title, setTitle] = useState(initialEditorState?.title || "")
   const [error, setError] = useState<ImageUploadErrorType | null>(null)
-
-  const getErrorMessage = (errorType: ImageUploadErrorType) => {
-    switch (errorType) {
-      case "file-too-large":
-        return translations.imageUpload.errors.fileTooLarge
-      case "invalid-type":
-        return translations.imageUpload.errors.invalidType
-      case "upload-failed":
-        return translations.imageUpload.errors.uploadFailed
-      default:
-        return translations.imageUpload.errors.uploadFailed
-    }
-  }
 
   useEffect(() => {
     if (onTitleChange) {
@@ -270,29 +255,7 @@ const F0NotesTextEditorComponent = forwardRef<
         />
       )}
       {error && (
-        <div className="mx-auto flex w-full max-w-[824px] px-14 py-2">
-          <div className="flex w-max max-w-full items-center gap-4 rounded-md bg-f1-background-critical p-2 drop-shadow-sm">
-            <div className="flex w-full flex-row items-center gap-2">
-              <div className="flex-shrink-0">
-                <F0AvatarAlert size="sm" type="critical" />
-              </div>
-              <p
-                className="w-full max-w-xl flex-grow truncate text-ellipsis text-sm font-semibold text-f1-foreground-critical"
-                title={getErrorMessage(error)}
-              >
-                {getErrorMessage(error)}
-              </p>
-            </div>
-            <div className="flex-shrink-0">
-              <F0Button
-                variant="outline"
-                onClick={() => setError(null)}
-                label={translations.imageUpload.errors.dismiss}
-                size="sm"
-              />
-            </div>
-          </div>
-        </div>
+        <ImageUploadError errorType={error} onDismiss={() => setError(null)} />
       )}
       <AnimatePresence>
         {enhance.error && !enhance.isLoading && (
@@ -304,7 +267,7 @@ const F0NotesTextEditorComponent = forwardRef<
             transition={{ duration: 0.3 }}
             className="mx-auto flex w-full max-w-[824px] items-center justify-center px-14 py-2"
           >
-            <EnhanceError
+            <EnhanceErrorBanner
               error={enhance.error}
               onDismiss={enhance.clearError}
             />

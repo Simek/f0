@@ -7,7 +7,7 @@ import { Toolbar } from "@/components/RichText/internal"
 import { Cross, Paperclip, TextSize } from "@/icons/app"
 import { useI18n } from "@/lib/providers/i18n/i18n-provider"
 
-import { EnhanceActivator } from "../../Enhance"
+import { EnhanceActivator } from "@/components/RichText/internal/Enhance"
 import {
   enhanceConfig,
   primaryActionType,
