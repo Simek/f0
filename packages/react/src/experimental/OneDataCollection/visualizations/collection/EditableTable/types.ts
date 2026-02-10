@@ -18,6 +18,9 @@ import type {
 
 export type EditableTableVisualizationSettings = TableVisualizationSettings
 
+/** The edit mode for a column cell in the editable table. */
+export type EditableTableCellEditType = "text"
+
 /** Column definition for Editable Table; optional `field` binds the cell input to item[field]. */
 export type EditableTableColumnDefinition<
   R extends RecordType,
@@ -26,6 +29,13 @@ export type EditableTableColumnDefinition<
 > = TableColumnDefinition<R, Sortings, Summaries> & {
   /** Key of the record to bind the cell input to; value comes from item[field]. */
   field?: keyof R & string
+
+  /**
+   * Determines how the cell is rendered in edit mode.
+   * When set to `"text"`, the cell renders as an inline text input.
+   * When omitted, the cell is rendered read-only using the standard `render` function.
+   */
+  editType?: EditableTableCellEditType
 }
 
 export type EditableTableVisualizationOptions<

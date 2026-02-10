@@ -10,14 +10,16 @@ import * as EditableTableStories from "./editable-table.stories"
 The Editable Table visualization is a tabular view that uses the same layout and
 features as the [Table](/?path=/docs/components-data-collection-visualizations-table--documentation)
 visualization (columns, sorting, selection, grouping, pagination, summaries).
-Its main difference is that it keeps **its own column order and visibility state**
-separately from the Table view. That way you can offer both a read-only table
-and an “editable table” (e.g. for editing or a different default layout) without
-sharing the same settings.
+Its main differences are:
 
-Use it when you need a second table-like view with independent column
-configuration (e.g. “Table view” and “Editable table view” in the same data
-collection).
+- It keeps **its own column order and visibility state** separately from the
+  Table view.
+- Columns can declare an **`editType`** to render cells as inline inputs instead
+  of read-only values.
+- An **`onCellChange`** callback is fired whenever a user edits a cell.
+
+Use it when you need an editable table view alongside (or instead of) a
+read-only Table view in the same data collection.
 
 ## Examples
 
@@ -25,8 +27,7 @@ collection).
 
 ## Setting Up Editable Table Visualization
 
-Use `type: "editableTable"` in the `visualizations` prop. Options are the same as
-for the Table visualization:
+Use `type: "editableTable"` in the `visualizations` prop:
 
 ```tsx
 <OneDataCollection
@@ -36,11 +37,40 @@ for the Table visualization:
       type: "editableTable",
       options: {
         columns: [
-          { label: "Name", render: (item) => item.name, sorting: "name", width: 140 },
-          { label: "Email", render: (item) => item.email, sorting: "email" },
-          { label: "Role", render: (item) => item.role, sorting: "role" },
-          { label: "Department", render: (item) => item.department, sorting: "department" },
+          {
+            label: "Name",
+            render: (item) => item.name,
+            field: "name",
+            editType: "text",
+            sorting: "name",
+            width: 140,
+          },
+          {
+            label: "Email",
+            render: (item) => item.email,
+            field: "email",
+            editType: "text",
+            sorting: "email",
+          },
+          {
+            label: "Role",
+            render: (item) => item.role,
+            field: "role",
+            editType: "text",
+            sorting: "role",
+          },
+          {
+            label: "Status",
+            render: (item) => ({
+              type: "status",
+              value: { status: "positive", label: item.status },
+            }),
+            // No editType → cell is rendered read-only
+          },
         ],
+        onCellChange: (item, columnId, value) => {
+          console.log("Cell changed", item.id, columnId, value)
+        },
         frozenColumns: 0,
         allowColumnReordering: true,
         allowColumnHiding: true,
@@ -52,25 +82,90 @@ for the Table visualization:
 
 ## Options
 
-The Editable Table accepts the same options as the Table visualization:
+The Editable Table accepts the same base options as the Table visualization,
+plus editable-specific ones:
 
-- **columns** – Column definitions (same shape as [Table column definition](/?path=/docs/components-data-collection-visualizations-table--documentation)).
+- **columns** – Column definitions (extends the [Table column definition](/?path=/docs/components-data-collection-visualizations-table--documentation) with `editType` and `field`; see below).
+- **onCellChange** – `(item: R, columnId: string, value: string) => void`. Called whenever a user changes a cell value. `columnId` is the column's `id` (or `label` if no `id` is set).
 - **frozenColumns** – Number of columns to freeze on the left (`0`, `1`, or `2`).
 - **allowColumnReordering** – Let users reorder columns via settings.
 - **allowColumnHiding** – Let users show/hide columns via settings.
 
-For full details on column definitions, frozen columns, and advanced features, see
-the [Table visualization documentation](/?path=/docs/components-data-collection-visualizations-table--documentation).
+## Editable Table Column Definition
+
+The column definition extends the Table column definition with two additional
+properties:
+
+```ts
+type EditableTableColumnDefinition<T> = TableColumnDefinition<T> & {
+  /**
+   * Determines how the cell is rendered in edit mode.
+   * When set to "text", the cell renders as an inline text input.
+   * When omitted, the cell is rendered read-only using the standard render function.
+   */
+  editType?: "text"
+
+  /**
+   * Key of the record to bind the cell input value to.
+   * The input value is initialized from item[field].
+   */
+  field?: keyof T & string
+}
+```
+
+### `editType`
+
+Controls whether a cell is editable and which input type to use:
+
+| Value | Behavior |
+|-------|----------|
+| `"text"` | Renders an inline text `<Input>`. The user can type directly in the cell. |
+| _(omitted)_ | Cell is **read-only** — rendered with the standard `render` function, same as in the Table visualization. |
+
+### `field`
+
+When `field` is provided, the input value is initialized from `item[field]`.
+When the user types, the new value is reported via `onCellChange` along with the
+`columnId`, so you can update the backing data.
+
+If `field` is omitted, the initial value falls back to the string output of the
+column's `render` function.
+
+### Example: mixing editable and read-only columns
+
+```tsx
+columns: [
+  {
+    id: "name",
+    label: "Name",
+    field: "name",
+    editType: "text",           // ← editable text input
+    render: (item) => item.name,
+  },
+  {
+    id: "department",
+    label: "Department",
+    render: (item) => ({
+      type: "dotTag",
+      value: { color: "blue", label: item.department },
+    }),
+    // No editType → read-only cell (renders the dotTag)
+  },
+]
+```
 
 ## Table vs Editable Table
 
 | Aspect | Table | Editable Table |
 |--------|--------|----------------|
 | Storage key | `table` | `editableTable` |
-| Column order/hidden state | Shared for “Table view” | Independent from Table |
-| Use case | Default read-only table | Second table view with its own layout |
+| Column order/hidden state | Shared for "Table view" | Independent from Table |
+| Cell editing | Read-only | Supports inline editing via `editType` |
+| Item actions | Supported | Disabled (cells are interactive) |
+| `onCellChange` callback | N/A | Fires on every cell edit |
+| Use case | Default read-only table | Inline editing or a different default layout |
 
 You can offer both in the same collection; users switch via the visualization
 selector and each view keeps its own column order and visibility.
 
-<Canvas of={EditableTableStories.EditableTableWithColumnSettings} />
+<Canvas of={EditableTableStories.TableAndEditableTable} />

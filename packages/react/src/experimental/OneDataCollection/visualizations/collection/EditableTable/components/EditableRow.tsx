@@ -51,26 +51,6 @@ function getColumnId<R extends RecordType>(
   return column.id ?? column.label ?? "column"
 }
 
-function isTextColumn<R extends RecordType>(
-  item: R,
-  column: EditableTableColumnDefinition<
-    R,
-    SortingsDefinition,
-    SummariesDefinition
-  >
-): boolean {
-  const rendered = column.render(item)
-  if (typeof rendered === "string" || typeof rendered === "number") return true
-  if (
-    typeof rendered === "object" &&
-    rendered !== null &&
-    "type" in rendered &&
-    (rendered as { type: string }).type === "text"
-  )
-    return true
-  return false
-}
-
 export type EditableRowProps<
   R extends RecordType,
   Filters extends FiltersDefinition,
@@ -79,14 +59,17 @@ export type EditableRowProps<
   ItemActions extends ItemActionsDefinition<R>,
   NavigationFilters extends NavigationFiltersDefinition,
   Grouping extends GroupingDefinition<R>,
-> = RowProps<
-  R,
-  Filters,
-  Sortings,
-  Summaries,
-  ItemActions,
-  NavigationFilters,
-  Grouping
+> = Omit<
+  RowProps<
+    R,
+    Filters,
+    Sortings,
+    Summaries,
+    ItemActions,
+    NavigationFilters,
+    Grouping
+  >,
+  "columns"
 > & {
   columns: ReadonlyArray<EditableTableColumnDefinition<R, Sortings, Summaries>>
   onCellChange?: (item: R, columnId: string, value: string) => void
@@ -247,11 +230,11 @@ const EditableRowInner = <
           <div
             className={cn(
               "flex w-full min-w-0",
-              isTextColumn(item, column) && "cursor-text",
+              column.editType === "text" && "cursor-text",
               column.align === "right" && "justify-end"
             )}
           >
-            {isTextColumn(item, column) ? (
+            {column.editType === "text" ? (
               <Input
                 type="text"
                 label={column.label}
