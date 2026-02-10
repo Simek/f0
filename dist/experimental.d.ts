@@ -2734,8 +2734,11 @@ declare type EditableTableColumnDefinition<R extends RecordType, Sortings extend
 
 declare type EditableTableVisualizationOptions<R extends RecordType, _Filters extends FiltersDefinition, Sortings extends SortingsDefinition, Summaries extends SummariesDefinition> = Omit<TableVisualizationOptions<R, _Filters, Sortings, Summaries>, "columns"> & {
     columns: ReadonlyArray<EditableTableColumnDefinition<R, Sortings, Summaries>>;
-    /** Called when a cell value changes with the full updated row. */
-    onCellChange?: (updatedItem: R) => void;
+    /**
+     * Called when a cell value changes with the full updated row.
+     * If the returned promise rejects, the cell displays an error state.
+     */
+    onCellChange?: (updatedItem: R) => void | Promise<void>;
 };
 
 declare type EditableTableVisualizationSettings = TableVisualizationSettings;
